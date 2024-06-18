@@ -1,6 +1,7 @@
 import os
+import config
 
-os.system(f"cd ~/Documents/proxy_server && \
-    source /opt/homebrew/anaconda3/etc/profile.d/conda.sh && \
-    conda activate prx && \
-    python server.py")
+os.system(f"cd {config.server_address} && \
+    source {config.local_conda_path} && \
+    conda activate {config.local_env} && \
+    python {config.script}")
