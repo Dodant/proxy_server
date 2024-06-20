@@ -82,7 +82,7 @@ def execute_remote_commands(filepath, filename, method):
     output_filepath = pth.join(config.path, 'req_img', output_filename)
 
     scp_upload_cmd = f"scp -P {config.port} ./{filepath} {config.address}:{remote_filepath}"
-    curl_cmd = f"ssh {config.address} -p {config.port} \"curl -X POST -F 'image=@{remote_filepath}' -F 'method={method}' http://127.0.0.1:5004/process_image --output {output_filepath}\""
+    curl_cmd = f"ssh {config.address} -p {config.port} \"curl -X POST -F 'image=@{remote_filepath}' -F 'method={method}' http://127.0.0.1:5005/process_image --output {output_filepath}\""
     scp_download_cmd = f"scp -P {config.port} {config.address}:{output_filepath} ./{app.config['DOWNLOAD_FOLDER']}"
     cleanup_cmd = f"ssh {config.address} -p {config.port} \"rm -r {config.path}/req_img/*\""
 
