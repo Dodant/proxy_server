@@ -82,7 +82,7 @@ def execute_remote_commands(filepath, filename, method):
     output_filepath = pth.join(config.path, 'req_img', output_filename)
 
     scp_upload_cmd = f"scp -P {config.port} ./{filepath} {config.address}:{remote_filepath}"
-    curl_cmd = f"ssh {config.address} -p {config.port} \"curl -X POST -F 'image=@{remote_filepath}' -F 'method={method}' http://127.0.0.1:5005/process_image --output {output_filepath}\""
+    curl_cmd = f"ssh {config.address} -p {config.port} \"curl -X POST -F 'image=@{remote_filepath}' -F 'method={method}' http://127.0.0.1:{config.outerport}/process_image --output {output_filepath}\""
     scp_download_cmd = f"scp -P {config.port} {config.address}:{output_filepath} ./{app.config['DOWNLOAD_FOLDER']}"
     cleanup_cmd = f"ssh {config.address} -p {config.port} \"rm -r {config.path}/req_img/*\""
 
@@ -119,5 +119,5 @@ if __name__ == '__main__':
     if not pth.exists(app.config['UPLOAD_FOLDER']): os.makedirs(app.config['UPLOAD_FOLDER'])
     if not pth.exists(app.config['DOWNLOAD_FOLDER']): os.makedirs(app.config['DOWNLOAD_FOLDER'])
     
-    hostIP, port = '0.0.0.0', 5005
-    app.run(host=hostIP, port=port, debug=True)
+    hostIP= '0.0.0.0'
+    app.run(host=hostIP, port=config.outerport, debug=True)
