@@ -103,15 +103,21 @@ def prx_image():
     if file and allowed_file(file.filename):
         filepath, filename = save_uploaded_file(file)
         method = request.form.get('method')
-        output_filename = execute_remote_commands(filepath, filename, method)
-        download_path = pth.join(app.config['DOWNLOAD_FOLDER'], output_filename)
-
-        if pth.exists(download_path):
-            with open(download_path, 'rb') as file: 
-                img_data = file.read()
+        if method == 'original':
+            if pth.exists(filepath):
+                with open(filepath, 'rb') as file: 
+                    img_data = file.read()
             return send_file(BytesIO(img_data), mimetype='image/jpeg')
         else:
-            return jsonify(error='File not found'), 404
+            output_filename = execute_remote_commands(filepath, filename, method)
+            download_path = pth.join(app.config['DOWNLOAD_FOLDER'], output_filename)
+
+            if pth.exists(download_path):
+                with open(download_path, 'rb') as file: 
+                    img_data = file.read()
+                return send_file(BytesIO(img_data), mimetype='image/jpeg')
+            else:
+                return jsonify(error='File not found'), 404
 
     return jsonify(error='Invalid file type'), 400
 
